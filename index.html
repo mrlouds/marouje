@@ -12,6 +12,55 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons CDN -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- intl-tel-input for International Phone Validation & Flags -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/css/intl-tel-input.css">
+  <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/js/intl-tel-input.min.js"></script>
+  <style>
+    /* intl-tel-input overrides for dark mode & full width */
+    .iti { width: 100%; display: block; }
+    .iti__country-list {
+      background-color: #ffffff;
+      color: #0f172a;
+      border-radius: 1rem;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+      z-index: 100;
+      max-height: 220px;
+    }
+    .dark .iti__country-list {
+      background-color: #082f49;
+      color: #f8fafc;
+      border-color: #0c4a6e;
+    }
+    .dark .iti__country.iti__highlight {
+      background-color: #0369a1;
+      color: #ffffff;
+    }
+    .iti__country-name, .iti__dial-code {
+      font-size: 0.85rem;
+    }
+    /* Phone Input RTL/LTR Fix */
+    [dir="rtl"] .iti--allow-dropdown .iti__flag-container,
+    [dir="rtl"] .iti--separate-dial-code .iti__flag-container {
+      right: 0;
+      left: auto;
+    }
+    [dir="rtl"] .iti--separate-dial-code input[type="tel"] {
+      padding-right: 92px !important;
+      padding-left: 16px !important;
+      direction: ltr !important;
+      text-align: right !important;
+    }
+    [dir="ltr"] .iti--separate-dial-code input[type="tel"] {
+      padding-left: 92px !important;
+      padding-right: 16px !important;
+      direction: ltr !important;
+      text-align: left !important;
+    }
+    .dark .iti__selected-dial-code {
+      color: #38bdf8;
+    }
+  </style>
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -219,7 +268,10 @@
             </div>
             <div>
               <label id="lbl-phone" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">رقم الجوال *</label>
-              <input type="tel" id="res-phone" placeholder="+966 50 000 0000" required class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-ocean-800 bg-white dark:bg-ocean-950 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-ocean-500">
+              <div class="relative">
+                <input type="tel" id="res-phone" required class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-ocean-800 bg-white dark:bg-ocean-950 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-ocean-500 transition-colors">
+              </div>
+              <p id="phone-error-msg" class="hidden text-xs font-bold text-red-500 dark:text-red-400 mt-1.5 flex items-center gap-1"></p>
             </div>
           </div>
 
@@ -654,16 +706,75 @@
       window.open(url, '_blank');
     }
 
-    // Reservation Form Handler
+    // Phone Input with intl-tel-input
+    let phoneInput;
+    const phoneInputField = document.getElementById('res-phone');
+    const phoneErrorMsg = document.getElementById('phone-error-msg');
+
+    function initPhoneInput() {
+      if (!phoneInputField) return;
+      phoneInput = window.intlTelInput(phoneInputField, {
+        initialCountry: "sa", // Default to Saudi Arabia or auto
+        preferredCountries: ["sa", "eg", "ae", "kw", "bh", "om", "qa"],
+        separateDialCode: true,
+        strictMode: true,
+        utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@24.5.0/build/js/utils.js"
+      });
+
+      // Clear error on input
+      phoneInputField.addEventListener('input', () => {
+        phoneInputField.classList.remove('border-red-500', 'focus:ring-red-500');
+        phoneErrorMsg.classList.add('hidden');
+      });
+    }
+
+    // Reservation Form Handler with Strict Phone Validation
     function handleReservationSubmit(e) {
       e.preventDefault();
+      const isAr = currentLang === 'ar';
+
+      // Validate phone number
+      if (!phoneInput) {
+        return;
+      }
+
+      const isValid = phoneInput.isValidNumber();
+      if (!isValid) {
+        phoneInputField.classList.add('border-red-500', 'focus:ring-red-500');
+        const errorCode = phoneInput.getValidationError();
+        let errorText = isAr ? 'يرجى إدخال رقم جوال حقيقي وصحيح للدولة المختارة' : 'Please enter a valid real phone number for the selected country';
+
+        if (errorCode === window.intlTelInputUtils?.validationError?.TOO_SHORT) {
+          errorText = isAr ? 'رقم الجوال أقصر من المطلوب لهذه الدولة' : 'Phone number is too short for this country';
+        } else if (errorCode === window.intlTelInputUtils?.validationError?.TOO_LONG) {
+          errorText = isAr ? 'رقم الجوال أطول من المطلوب لهذه الدولة' : 'Phone number is too long for this country';
+        } else if (errorCode === window.intlTelInputUtils?.validationError?.INVALID_COUNTRY_CODE) {
+          errorText = isAr ? 'رمز الدولة غير صالح' : 'Invalid country dial code';
+        }
+
+        phoneErrorMsg.innerHTML = `<i data-lucide="alert-circle" class="w-4 h-4 inline-block"></i> <span>${errorText}</span>`;
+        phoneErrorMsg.classList.remove('hidden');
+        lucide.createIcons();
+        phoneInputField.focus();
+        return;
+      }
+
+      // Valid phone number - get full international formatted number
+      const fullPhoneNumber = phoneInput.getNumber();
+      console.log('Valid phone number submitted:', fullPhoneNumber);
+
+      phoneInputField.classList.remove('border-red-500', 'focus:ring-red-500');
+      phoneErrorMsg.classList.add('hidden');
+
       const banner = document.getElementById('res-success-banner');
       banner.classList.remove('hidden');
       document.getElementById('reservation-form').reset();
+      phoneInput.setNumber('');
       banner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
     // Initial boot
+    initPhoneInput();
     renderCategories();
     renderMenu();
     renderCart();
