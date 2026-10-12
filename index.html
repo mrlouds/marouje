@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مطعم مروج البحر | مأكولات بحرية فاخرة</title>
+  <!-- Google Fonts: Tajawal & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            ar: ['Tajawal', 'sans-serif'],
+            en: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            ocean: {
+              50: '#f0f9ff',
+              100: '#e0f2fe',
+              200: '#bae6fd',
+              300: '#7dd3fc',
+              400: '#38bdf8',
+              500: '#0284c7',
+              600: '#0369a1',
+              700: '#075985',
+              800: '#0c4a6e',
+              900: '#082f49',
+              950: '#031926',
+            },
+            coral: {
+              500: '#f43f5e',
+              600: '#e11d48',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Tajawal', sans-serif; }
+    body.lang-en { font-family: 'Inter', sans-serif; }
+    .glass-panel {
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-[#04111d] dark:text-slate-100 transition-colors duration-300 min-h-screen">
+
+  <!-- ================= NAVBAR ================= -->
+  <header id="main-header" class="fixed top-0 inset-x-0 z-40 transition-all duration-300 py-4 glass-panel bg-white/80 dark:bg-ocean-950/80 border-b border-slate-200/60 dark:border-ocean-800/40 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
+      <!-- Brand Logo -->
+      <a href="#home" class="flex items-center gap-3 group">
+        <span class="flex items-center justify-center h-11 w-11 rounded-2xl bg-gradient-to-tr from-ocean-600 to-ocean-400 text-white shadow-md shadow-ocean-600/30 group-hover:scale-105 transition-transform duration-200">
+          <i data-lucide="waves" class="w-6 h-6"></i>
+        </span>
+        <div class="flex flex-col">
+          <span id="brand-title" class="text-xl sm:text-2xl font-black text-ocean-700 dark:text-ocean-300 leading-none">مروج البحر</span>
+          <span id="brand-subtitle" class="text-[10px] tracking-widest uppercase text-slate-500 dark:text-slate-400 font-bold mt-1">مأكولات بحرية فاخرة</span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden md:flex items-center gap-8 text-sm font-bold">
+        <a href="#home" id="nav-home" class="hover:text-ocean-600 dark:hover:text-ocean-400 transition-colors">الرئيسية</a>
+        <a href="#menu" id="nav-menu" class="hover:text-ocean-600 dark:hover:text-ocean-400 transition-colors">قائمة الطعام</a>
+        <a href="#reservations" id="nav-reserve" class="hover:text-ocean-600 dark:hover:text-ocean-400 transition-colors">حجز طاولة</a>
+        <a href="#contact" id="nav-contact" class="hover:text-ocean-600 dark:hover:text-ocean-400 transition-colors">تواصل معنا</a>
+      </nav>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- Cart Button -->
+        <button onclick="toggleCartDrawer(true)" class="relative p-2.5 rounded-full border border-slate-200 dark:border-ocean-800 bg-white/90 dark:bg-ocean-900/60 hover:bg-ocean-50 dark:hover:bg-ocean-800 text-slate-700 dark:text-slate-200 transition-all shadow-sm" title="السلة">
+          <i data-lucide="shopping-bag" class="w-5 h-5 text-ocean-600 dark:text-ocean-400"></i>
+          <span id="cart-counter-badge" class="absolute -top-1 -right-1 bg-coral-500 text-white text-[11px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow-md scale-0 transition-transform duration-200">0</span>
+        </button>
+
+        <!-- Theme Toggle -->
+        <button onclick="toggleTheme()" class="p-2.5 rounded-full border border-slate-200 dark:border-ocean-800 bg-white/90 dark:bg-ocean-900/60 hover:bg-ocean-50 dark:hover:bg-ocean-800 text-slate-700 dark:text-slate-200 transition-all shadow-sm" title="تبديل المظهر">
+          <i id="theme-icon" data-lucide="moon" class="w-5 h-5 text-amber-500"></i>
+        </button>
+
+        <!-- Language Switcher -->
+        <button onclick="toggleLanguage()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-200 dark:border-ocean-800 bg-white/90 dark:bg-ocean-900/60 hover:bg-ocean-50 dark:hover:bg-ocean-800 text-xs font-bold text-ocean-700 dark:text-ocean-300 transition-all shadow-sm">
+          <i data-lucide="globe" class="w-4 h-4 text-ocean-500"></i>
+          <span id="lang-btn-text">EN</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= HERO SECTION ================= -->
+  <section id="home" class="relative pt-36 pb-20 overflow-hidden">
+    <!-- Glow Background -->
+    <div class="absolute -top-32 -right-32 w-96 h-96 bg-ocean-400/20 dark:bg-ocean-600/15 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute top-1/2 -left-32 w-96 h-96 bg-cyan-400/15 dark:bg-cyan-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 grid lg:grid-cols-12 gap-12 items-center">
+      <!-- Left Copy -->
+      <div class="lg:col-span-7 flex flex-col items-start gap-6 text-start">
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-ocean-200 dark:border-ocean-800 bg-ocean-100/70 dark:bg-ocean-950/70 text-ocean-700 dark:text-ocean-300 text-xs sm:text-sm font-bold shadow-sm">
+          <i data-lucide="fish" class="w-4 h-4 text-ocean-500 animate-pulse"></i>
+          <span id="hero-badge-text">صيد البحر الطازج يومياً</span>
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+        </div>
+
+        <h1 id="hero-title" class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.2] text-slate-900 dark:text-white">
+          أشهى المأكولات البحرية الفاخرة بطابع ساحلي أصيل
+        </h1>
+
+        <p id="hero-desc" class="text-base sm:text-lg text-slate-600 dark:text-slate-300 max-w-2xl leading-relaxed">
+          نختار أجود أنواع الأسماك وثمار البحر مباشرة من الصيادين المحليين، ونحضرها بأيدي أمهر الطهاة لتجربة تذوق استثنائية تأسر حواسك.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="flex flex-wrap items-center gap-4 pt-2 w-full sm:w-auto">
+          <a href="#menu" id="hero-cta-menu" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-2xl font-bold text-white bg-ocean-600 hover:bg-ocean-700 shadow-xl shadow-ocean-600/30 transition-all hover:-translate-y-0.5">
+            <i data-lucide="utensils-crossed" class="w-5 h-5"></i>
+            <span>استكشف القائمة</span>
+          </a>
+          <a href="#reservations" id="hero-cta-reserve" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-2xl font-bold border border-slate-300 dark:border-ocean-800 bg-white/80 dark:bg-ocean-900/60 hover:bg-slate-100 dark:hover:bg-ocean-800 text-slate-800 dark:text-slate-100 transition-all hover:-translate-y-0.5">
+            <i data-lucide="calendar" class="w-5 h-5 text-ocean-500"></i>
+            <span>احجز طاولتك الآن</span>
+          </a>
+        </div>
+
+        <!-- Social Proof Stats -->
+        <div class="grid grid-cols-3 gap-6 pt-6 border-t border-slate-200 dark:border-ocean-800/80 w-full max-w-lg">
+          <div>
+            <div class="text-2xl sm:text-3xl font-black text-ocean-600 dark:text-ocean-400">100%</div>
+            <div id="stat-fresh" class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-semibold mt-1">طازج يومياً</div>
+          </div>
+          <div>
+            <div class="text-2xl sm:text-3xl font-black text-ocean-600 dark:text-ocean-400">+45</div>
+            <div id="stat-dishes" class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-semibold mt-1">طبق بحري مميز</div>
+          </div>
+          <div>
+            <div class="text-2xl sm:text-3xl font-black text-amber-500 flex items-center gap-1">4.9 <i data-lucide="star" class="w-4 h-4 fill-amber-500"></i></div>
+            <div id="stat-rating" class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-semibold mt-1">تقييم الضيوف</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Visual Feature -->
+      <div class="lg:col-span-5 relative flex items-center justify-center">
+        <div class="relative w-full aspect-square max-w-md rounded-3xl overflow-hidden p-3 glass-panel bg-white/40 dark:bg-ocean-900/30 border border-white/40 dark:border-ocean-700/50 shadow-2xl">
+          <img src="https://images.unsplash.com/photo-1559847844-5315695dadae?q=80&w=900&auto=format&fit=crop" alt="Seafood Platter" class="w-full h-full object-cover rounded-2xl shadow-inner transition-transform duration-700 hover:scale-105">
+          <!-- Floating Badge -->
+          <div class="absolute bottom-6 inset-x-6 glass-panel bg-white/90 dark:bg-ocean-950/90 p-4 rounded-2xl border border-white/30 dark:border-ocean-800 shadow-xl flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="p-2.5 rounded-xl bg-amber-500/10 text-amber-500">
+                <i data-lucide="sparkles" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <p id="floating-chef-label" class="text-[11px] text-slate-500 dark:text-slate-400 font-bold">طبق الشيف اليومي</p>
+                <p id="floating-dish-title" class="text-sm font-black text-slate-900 dark:text-white">استاكوزا مشوية بالأعشاب</p>
+              </div>
+            </div>
+            <span class="text-ocean-600 dark:text-ocean-400 font-black text-base">195 <span class="currency-text text-xs">ر.س</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= MENU SECTION ================= -->
+  <section id="menu" class="py-24 bg-slate-100/60 dark:bg-ocean-950/40 border-y border-slate-200/60 dark:border-ocean-900/60 scroll-mt-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <span id="menu-sub" class="text-xs sm:text-sm font-extrabold uppercase tracking-widest text-ocean-600 dark:text-ocean-400">طازج من البحر</span>
+        <h2 id="menu-title" class="text-3xl sm:text-4xl font-black tracking-tight mt-2 text-slate-900 dark:text-white">قائمة المأكولات البحرية</h2>
+        <p id="menu-desc" class="mt-3 text-slate-600 dark:text-slate-400 text-sm sm:text-base">أطباق تم إعدادها بشغف مستوحاة من ثراء البحر المتوسط والخليج العربي</p>
+
+        <!-- Category Pills -->
+        <div id="category-container" class="mt-8 flex items-center justify-center gap-2 overflow-x-auto pb-2 no-scrollbar">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+
+      <!-- Menu Grid -->
+      <div id="menu-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= RESERVATION SECTION ================= -->
+  <section id="reservations" class="py-24 relative overflow-hidden scroll-mt-20">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-10">
+        <span id="res-badge" class="text-xs sm:text-sm font-extrabold uppercase tracking-widest text-ocean-600 dark:text-ocean-400">تجربة طعام لا تُنسى</span>
+        <h2 id="res-title" class="text-3xl sm:text-4xl font-black tracking-tight mt-2 text-slate-900 dark:text-white">احجز طاولتك مع إطلالة بحرية</h2>
+        <p id="res-desc" class="mt-2 text-slate-600 dark:text-slate-400 text-sm">املأ النموذج وسنتواصل معك فوراً لتأكيد الحجز وموقع طاولتك المفضلة</p>
+      </div>
+
+      <div class="glass-panel bg-white/80 dark:bg-ocean-900/60 border border-slate-200/80 dark:border-ocean-800 p-8 sm:p-10 rounded-3xl shadow-2xl">
+        <form id="reservation-form" onsubmit="handleReservationSubmit(event)" class="space-y-6">
+          <div id="res-success-banner" class="hidden p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 text-sm font-bold flex items-center gap-3">
+            <i data-lucide="check-circle" class="w-5 h-5 text-emerald-600"></i>
+            <span id="res-success-text">تم استلام طلب الحجز بنجاح! سنتواصل معك للتأكيد خلال دقائق.</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label id="lbl-name" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">الاسم الكامل *</label>
+              <input type="text" id="res-name" required class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-ocean-800 bg-white dark:bg-ocean-950 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-ocean-500">
+            </div>
+            <div>
+              <label id="lbl-phone" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">رقم الجوال *</label>
+              <input type="tel" id="res-phone" placeholder="+966 50 000 0000" required class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-ocean-800 bg-white dark:bg-ocean-950 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-ocean-500">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label id="lbl-date" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">تاريخ الحجز *</label>
+              <input type="date" id="res-date" required class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-ocean-800 bg-white dark:bg-ocean-950 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-ocean-500">
+            </div>
+            <div>
+              <label id="lbl-time" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">الوقت *</label>
+              <input type="time" id="res-time" required class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-ocean-800 bg-white dark:bg-ocean-950 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-ocean-500">
+            </div>
+            <div>
+              <label id="lbl-guests" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">عدد الضيوف *</label>
+              <input type="number" id="res-guests" value="2" min="1" max="20" required class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-ocean-800 bg-white dark:bg-ocean-950 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-ocean-500">
+            </div>
+          </div>
+
+          <div>
+            <label id="lbl-seating" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-2">مكان الجلوس المفضل</label>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <label class="flex items-center gap-3 p-3.5 rounded-xl border border-slate-300 dark:border-ocean-800 bg-white dark:bg-ocean-950 cursor-pointer hover:border-ocean-500">
+                <input type="radio" name="seating" value="seaView" checked class="text-ocean-600">
+                <span id="opt-sea" class="text-xs font-bold">إطلالة البحر المباشرة</span>
+              </label>
+              <label class="flex items-center gap-3 p-3.5 rounded-xl border border-slate-300 dark:border-ocean-800 bg-white dark:bg-ocean-950 cursor-pointer hover:border-ocean-500">
+                <input type="radio" name="seating" value="terrace" class="text-ocean-600">
+                <span id="opt-terrace" class="text-xs font-bold">الشرفة الخارجية</span>
+              </label>
+              <label class="flex items-center gap-3 p-3.5 rounded-xl border border-slate-300 dark:border-ocean-800 bg-white dark:bg-ocean-950 cursor-pointer hover:border-ocean-500">
+                <input type="radio" name="seating" value="indoor" class="text-ocean-600">
+                <span id="opt-indoor" class="text-xs font-bold">الصالة الداخلية الفاخرة</span>
+              </label>
+            </div>
+          </div>
+
+          <button type="submit" id="btn-submit-res" class="w-full inline-flex items-center justify-center gap-2 py-4 px-6 rounded-2xl font-black text-white bg-ocean-600 hover:bg-ocean-700 shadow-xl shadow-ocean-600/30 transition-all hover:-translate-y-0.5">
+            <i data-lucide="check" class="w-5 h-5"></i>
+            <span id="res-btn-text">تأكيد حجز الطاولة الآن</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SLIDE-OVER CART DRAWER ================= -->
+  <div id="cart-drawer-overlay" class="fixed inset-0 z-50 pointer-events-none opacity-0 transition-opacity duration-300">
+    <div onclick="toggleCartDrawer(false)" class="absolute inset-0 bg-black/60 backdrop-blur-sm cursor-pointer"></div>
+    <div id="cart-drawer-panel" class="absolute inset-y-0 start-0 max-w-md w-full bg-white dark:bg-ocean-950 shadow-2xl p-6 flex flex-col justify-between transform -translate-x-full transition-transform duration-300 border-e border-slate-200 dark:border-ocean-800">
+      <div>
+        <div class="flex items-center justify-between pb-5 border-b border-slate-200 dark:border-ocean-800">
+          <div class="flex items-center gap-2">
+            <i data-lucide="shopping-bag" class="w-5 h-5 text-ocean-600 dark:text-ocean-400"></i>
+            <h3 id="drawer-cart-title" class="font-black text-lg">سلة الطلبات</h3>
+            <span id="drawer-items-count" class="text-xs px-2 py-0.5 rounded-full bg-ocean-100 dark:bg-ocean-900 text-ocean-700 dark:text-ocean-300 font-bold">0</span>
+          </div>
+          <button onclick="toggleCartDrawer(false)" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-ocean-900 text-slate-500">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <!-- Cart Items List -->
+        <div id="cart-items-container" class="mt-6 space-y-4 max-h-[48vh] overflow-y-auto pr-1">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+
+      <!-- Footer & WhatsApp Checkout -->
+      <div id="cart-footer" class="pt-6 border-t border-slate-200 dark:border-ocean-800 space-y-4">
+        <div>
+          <label id="lbl-cart-notes" class="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">ملاحظات إضافية على الطلب</label>
+          <textarea id="cart-notes" rows="2" placeholder="طريقة الطهي، مستوى البهارات..." class="w-full text-xs p-2.5 rounded-xl border border-slate-300 dark:border-ocean-800 bg-slate-50 dark:bg-ocean-900/60 focus:outline-none focus:ring-2 focus:ring-ocean-500 resize-none"></textarea>
+        </div>
+
+        <div class="flex items-center justify-between text-base font-black">
+          <span id="lbl-cart-total">المجموع الإجمالي:</span>
+          <span class="text-xl text-ocean-600 dark:text-ocean-400"><span id="cart-total-num">0</span> <span class="currency-text text-xs">ر.س</span></span>
+        </div>
+
+        <button onclick="sendOrderWhatsApp()" id="btn-whatsapp" class="w-full inline-flex items-center justify-center gap-2.5 py-3.5 px-4 rounded-xl font-black text-white bg-emerald-600 hover:bg-emerald-700 shadow-xl shadow-emerald-600/30 transition-all">
+          <i data-lucide="message-circle" class="w-5 h-5"></i>
+          <span id="btn-whatsapp-text">إرسال الطلب عبر واتساب</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= SCRIPTS ================= -->
+  <script>
+    // State
+    let currentLang = 'ar';
+    let currentTheme = 'light';
+    let selectedCategory = 'all';
+    let cart = [];
+
+    // Catalog Data
+    const catalog = [
+      {
+        id: 'lobster',
+        cat: 'platters',
+        nameAr: 'استاكوزا ثيرميدور فاخرة',
+        nameEn: 'Royal Lobster Thermidor',
+        descAr: 'استاكوزا بحرية طازجة محشوة بالكريمة الغنية وجبن الغرويير والأعشاب.',
+        descEn: 'Fresh lobster baked with rich cream, Gruyère cheese and fragrant herbs.',
+        price: 240,
+        img: 'https://images.unsplash.com/photo-1559847844-5315695dadae?q=80&w=600&auto=format&fit=crop',
+        special: true,
+        spicy: false
+      },
+      {
+        id: 'seabass',
+        cat: 'fresh',
+        nameAr: 'قاروص مشوي على الفحم',
+        nameEn: 'Charcoal Grilled Sea Bass',
+        descAr: 'سمك قاروص طازج متبل بزيت الزيتون والليمون والكمون الساحلي.',
+        descEn: 'Fresh Mediterranean sea bass marinated with virgin olive oil, lemon and cumin.',
+        price: 135,
+        img: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?q=80&w=600&auto=format&fit=crop',
+        special: true,
+        spicy: false
+      },
+      {
+        id: 'calamari',
+        cat: 'appetizers',
+        nameAr: 'كالاماري مقرمش بالليمون',
+        nameEn: 'Crispy Salt & Pepper Calamari',
+        descAr: 'حلقات الحبار الذهبية المقرمشة مع صلصة التارتار المعدة منزلياً.',
+        descEn: 'Golden crispy calamari rings served with house-made tartar sauce.',
+        price: 65,
+        img: 'https://images.unsplash.com/photo-1604909052743-94e838986d24?q=80&w=600&auto=format&fit=crop',
+        special: false,
+        spicy: false
+      },
+      {
+        id: 'dynamite',
+        cat: 'appetizers',
+        nameAr: 'جمبري ديناميت الحار',
+        nameEn: 'Spicy Dynamite Shrimp',
+        descAr: 'جمبري مقرمش بصلصة السيراتشا الكريمية الحارة وبذور السمسم.',
+        descEn: 'Crispy batter prawns tossed in spicy creamy sriracha glaze.',
+        price: 75,
+        img: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?q=80&w=600&auto=format&fit=crop',
+        special: false,
+        spicy: true
+      },
+      {
+        id: 'paella',
+        cat: 'platters',
+        nameAr: 'بايلا ثمار البحر الإسبانية',
+        nameEn: 'Coastal Seafood Paella',
+        descAr: 'أرز الزعفران الفاخر مع بلح البحر، الجمبري الجامبو والكالاماري.',
+        descEn: 'Saffron rice cooked with black mussels, jumbo tiger prawns, and baby squid.',
+        price: 185,
+        img: 'https://images.unsplash.com/photo-1534080564583-6be75777b70a?q=80&w=600&auto=format&fit=crop',
+        special: true,
+        spicy: false
+      },
+      {
+        id: 'lemonade',
+        cat: 'beverages',
+        nameAr: 'عصير الليمون بالنعناع',
+        nameEn: 'Fresh Mint Lemonade',
+        descAr: 'عصير منعش من الليمون الطبيعي وأوراق النعناع الطازجة والثلج المجروش.',
+        descEn: 'Refreshing fresh lemon juice with crushed mint leaves and ice.',
+        price: 25,
+        img: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?q=80&w=600&auto=format&fit=crop',
+        special: false,
+        spicy: false
+      }
+    ];
+
+    const categories = [
+      { id: 'all', ar: 'الكل', en: 'All' },
+      { id: 'fresh', ar: 'صيد اليوم الطازج', en: 'Catch of the Day' },
+      { id: 'platters', ar: 'الأطباق المميزة', en: 'Signature Platters' },
+      { id: 'appetizers', ar: 'المقبلات البحرية', en: 'Appetizers' },
+      { id: 'beverages', ar: 'المشروبات', en: 'Beverages' }
+    ];
+
+    // Language Toggle
+    function toggleLanguage() {
+      currentLang = currentLang === 'ar' ? 'en' : 'ar';
+      const isAr = currentLang === 'ar';
+      document.documentElement.lang = currentLang;
+      document.documentElement.dir = isAr ? 'rtl' : 'ltr';
+      document.body.classList.toggle('lang-en', !isAr);
+
+      // Update static labels
+      document.getElementById('lang-btn-text').innerText = isAr ? 'EN' : 'عربي';
+      document.getElementById('brand-title').innerText = isAr ? 'مروج البحر' : 'Marouj Al Bahr';
+      document.getElementById('brand-subtitle').innerText = isAr ? 'مأكولات بحرية فاخرة' : 'Seafood Dining';
+      document.getElementById('nav-home').innerText = isAr ? 'الرئيسية' : 'Home';
+      document.getElementById('nav-menu').innerText = isAr ? 'قائمة الطعام' : 'Menu';
+      document.getElementById('nav-reserve').innerText = isAr ? 'حجز طاولة' : 'Reservations';
+      document.getElementById('nav-contact').innerText = isAr ? 'تواصل معنا' : 'Contact';
+      document.getElementById('hero-badge-text').innerText = isAr ? 'صيد البحر الطازج يومياً' : 'Fresh Catch Daily';
+      document.getElementById('hero-title').innerText = isAr ? 'أشهى المأكولات البحرية الفاخرة بطابع ساحلي أصيل' : 'Gourmet Ocean Dining & Coastal Mediterranean Flavors';
+      document.getElementById('hero-desc').innerText = isAr ? 'نختار أجود أنواع الأسماك وثمار البحر مباشرة من الصيادين المحليين، ونحضرها بأيدي أمهر الطهاة لتجربة تذوق استثنائية.' : 'Sourced directly from local fishermen and crafted by master culinary artists for an unforgettable feast.';
+      document.getElementById('hero-cta-menu').querySelector('span').innerText = isAr ? 'استكشف القائمة' : 'Explore Menu';
+      document.getElementById('hero-cta-reserve').querySelector('span').innerText = isAr ? 'احجز طاولتك الآن' : 'Reserve a Table';
+      document.getElementById('stat-fresh').innerText = isAr ? 'طازج يومياً' : '100% Fresh Catch';
+      document.getElementById('stat-dishes').innerText = isAr ? 'طبق بحري مميز' : '+45 Signature Dishes';
+      document.getElementById('stat-rating').innerText = isAr ? 'تقييم الضيوف' : 'Guest Rating';
+      document.getElementById('floating-chef-label').innerText = isAr ? 'طبق الشيف اليومي' : "Chef's Special";
+      document.getElementById('floating-dish-title').innerText = isAr ? 'استاكوزا مشوية بالأعشاب' : 'Grilled Herb Butter Lobster';
+      document.getElementById('menu-sub').innerText = isAr ? 'طازج من البحر' : 'Fresh From The Sea';
+      document.getElementById('menu-title').innerText = isAr ? 'قائمة المأكولات البحرية' : 'Fresh Seafood Menu';
+      document.getElementById('menu-desc').innerText = isAr ? 'أطباق تم إعدادها بشغف مستوحاة من ثراء البحر' : 'Handcrafted culinary creations inspired by coastal heritage';
+      document.querySelectorAll('.currency-text').forEach(el => el.innerText = isAr ? 'ر.س' : 'SAR');
+      
+      // Reservation
+      document.getElementById('res-badge').innerText = isAr ? 'تجربة طعام لا تُنسى' : 'Unforgettable Dining';
+      document.getElementById('res-title').innerText = isAr ? 'احجز طاولتك مع إطلالة بحرية' : 'Reserve Your Coastal Table';
+      document.getElementById('res-desc').innerText = isAr ? 'املأ النموذج وسنتواصل معك فوراً لتأكيد الحجز' : 'Fill out the form below to secure your seaside table';
+      document.getElementById('lbl-name').innerText = isAr ? 'الاسم الكامل *' : 'Full Name *';
+      document.getElementById('lbl-phone').innerText = isAr ? 'رقم الجوال *' : 'Phone Number *';
+      document.getElementById('lbl-date').innerText = isAr ? 'تاريخ الحجز *' : 'Date *';
+      document.getElementById('lbl-time').innerText = isAr ? 'الوقت *' : 'Time *';
+      document.getElementById('lbl-guests').innerText = isAr ? 'عدد الضيوف *' : 'Number of Guests *';
+      document.getElementById('lbl-seating').innerText = isAr ? 'مكان الجلوس المفضل' : 'Preferred Seating Area';
+      document.getElementById('opt-sea').innerText = isAr ? 'إطلالة البحر المباشرة' : 'Direct Seafront View';
+      document.getElementById('opt-terrace').innerText = isAr ? 'الشرفة الخارجية' : 'Outdoor Terrace';
+      document.getElementById('opt-indoor').innerText = isAr ? 'الصالة الداخلية الفاخرة' : 'Luxury Indoor Hall';
+      document.getElementById('res-btn-text').innerText = isAr ? 'تأكيد حجز الطاولة الآن' : 'Confirm Table Reservation';
+      document.getElementById('res-success-text').innerText = isAr ? 'تم استلام طلب الحجز بنجاح! سنتواصل معك للتأكيد خلال دقائق.' : 'Reservation received! We will contact you in a few minutes.';
+
+      // Drawer
+      document.getElementById('drawer-cart-title').innerText = isAr ? 'سلة الطلبات' : 'Your Seafood Order';
+      document.getElementById('lbl-cart-notes').innerText = isAr ? 'ملاحظات إضافية على الطلب' : 'Special Instructions';
+      document.getElementById('lbl-cart-total').innerText = isAr ? 'المجموع الإجمالي:' : 'Total Amount:';
+      document.getElementById('btn-whatsapp-text').innerText = isAr ? 'إرسال الطلب عبر واتساب' : 'Order via WhatsApp';
+
+      renderCategories();
+      renderMenu();
+      renderCart();
+      lucide.createIcons();
+    }
+
+    // Theme Toggle
+    function toggleTheme() {
+      const html = document.documentElement;
+      if (html.classList.contains('dark')) {
+        html.classList.remove('dark');
+        document.getElementById('theme-icon').setAttribute('data-lucide', 'moon');
+      } else {
+        html.classList.add('dark');
+        document.getElementById('theme-icon').setAttribute('data-lucide', 'sun');
+      }
+      lucide.createIcons();
+    }
+
+    // Render Categories
+    function renderCategories() {
+      const container = document.getElementById('category-container');
+      container.innerHTML = categories.map(cat => {
+        const isSelected = selectedCategory === cat.id;
+        const label = currentLang === 'ar' ? cat.ar : cat.en;
+        return `
+          <button onclick="setCategory('${cat.id}')" class="px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold whitespace-nowrap transition-all ${
+            isSelected
+              ? 'bg-ocean-600 text-white shadow-md shadow-ocean-600/30'
+              : 'bg-white dark:bg-ocean-900/60 border border-slate-300 dark:border-ocean-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-ocean-800'
+          }">
+            ${label}
+          </button>
+        `;
+      }).join('');
+    }
+
+    function setCategory(id) {
+      selectedCategory = id;
+      renderCategories();
+      renderMenu();
+    }
+
+    // Render Menu Cards
+    function renderMenu() {
+      const grid = document.getElementById('menu-grid');
+      const filtered = selectedCategory === 'all' ? catalog : catalog.filter(x => x.cat === selectedCategory);
+      const isAr = currentLang === 'ar';
+      const currency = isAr ? 'ر.س' : 'SAR';
+
+      grid.innerHTML = filtered.map(item => `
+        <div class="group rounded-3xl bg-white dark:bg-ocean-900/50 border border-slate-200/80 dark:border-ocean-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between hover:-translate-y-1">
+          <div class="relative aspect-[4/3] w-full overflow-hidden bg-slate-100 dark:bg-ocean-950">
+            <img src="${item.img}" alt="${isAr ? item.nameAr : item.nameEn}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+            <div class="absolute top-3 inset-x-3 flex items-center justify-between pointer-events-none">
+              <div class="flex gap-1.5">
+                ${item.special ? `<span class="px-2.5 py-1 rounded-full text-[11px] font-black bg-amber-500 text-white shadow">${isAr ? 'مميز' : 'Special'}</span>` : ''}
+                ${item.spicy ? `<span class="px-2.5 py-1 rounded-full text-[11px] font-black bg-red-600 text-white shadow">${isAr ? 'حار' : 'Spicy'}</span>` : ''}
+              </div>
+            </div>
+          </div>
+          <div class="p-5 flex-1 flex flex-col justify-between">
+            <div>
+              <div class="flex items-baseline justify-between gap-2 mb-2">
+                <h3 class="font-black text-lg text-slate-900 dark:text-white group-hover:text-ocean-600 transition-colors">${isAr ? item.nameAr : item.nameEn}</h3>
+                <span class="font-black text-ocean-600 dark:text-ocean-400 text-lg whitespace-nowrap">${item.price} <span class="text-xs font-bold">${currency}</span></span>
+              </div>
+              <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">${isAr ? item.descAr : item.descEn}</p>
+            </div>
+            <div class="mt-5 pt-4 border-t border-slate-100 dark:border-ocean-800/60 flex items-center justify-end">
+              <button onclick="addToCart('${item.id}')" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-ocean-600 hover:bg-ocean-700 text-white shadow-md shadow-ocean-600/25 transition-all active:scale-95">
+                <i data-lucide="plus" class="w-4 h-4"></i>
+                <span>${isAr ? 'إضافة للطلب' : 'Add to Order'}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    // Cart Functions
+    function addToCart(id) {
+      const item = catalog.find(x => x.id === id);
+      const existing = cart.find(x => x.id === id);
+      if (existing) {
+        existing.qty++;
+      } else {
+        cart.push({ ...item, qty: 1 });
+      }
+      updateCartUI();
+      toggleCartDrawer(true);
+    }
+
+    function changeQty(id, delta) {
+      const item = cart.find(x => x.id === id);
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) {
+        cart = cart.filter(x => x.id !== id);
+      }
+      updateCartUI();
+    }
+
+    function updateCartUI() {
+      const totalCount = cart.reduce((acc, x) => acc + x.qty, 0);
+      const badge = document.getElementById('cart-counter-badge');
+      badge.innerText = totalCount;
+      if (totalCount > 0) {
+        badge.classList.remove('scale-0');
+        badge.classList.add('scale-100');
+      } else {
+        badge.classList.remove('scale-100');
+        badge.classList.add('scale-0');
+      }
+      document.getElementById('drawer-items-count').innerText = totalCount;
+      renderCart();
+    }
+
+    function renderCart() {
+      const container = document.getElementById('cart-items-container');
+      const isAr = currentLang === 'ar';
+      const currency = isAr ? 'ر.س' : 'SAR';
+
+      if (cart.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-12 text-slate-400">
+            <i data-lucide="shopping-bag" class="w-12 h-12 mx-auto stroke-1 mb-2"></i>
+            <p class="text-sm font-bold">${isAr ? 'السلة فارغة حالياً' : 'Cart is empty'}</p>
+          </div>
+        `;
+        document.getElementById('cart-total-num').innerText = '0';
+        lucide.createIcons();
+        return;
+      }
+
+      let total = 0;
+      container.innerHTML = cart.map(item => {
+        const subtotal = item.price * item.qty;
+        total += subtotal;
+        return `
+          <div class="flex items-center gap-3 p-3 rounded-2xl border border-slate-200 dark:border-ocean-800 bg-slate-50 dark:bg-ocean-900/40">
+            <img src="${item.img}" class="w-14 h-14 object-cover rounded-xl shrink-0">
+            <div class="flex-1 min-w-0">
+              <h4 class="text-xs font-bold truncate text-slate-900 dark:text-white">${isAr ? item.nameAr : item.nameEn}</h4>
+              <p class="text-xs font-bold text-ocean-600 dark:text-ocean-400">${item.price} ${currency}</p>
+              <div class="flex items-center gap-2 mt-1.5">
+                <button onclick="changeQty('${item.id}', -1)" class="w-6 h-6 rounded-md border border-slate-300 dark:border-ocean-800 flex items-center justify-center text-xs font-black hover:bg-slate-200">-</button>
+                <span class="text-xs font-bold">${item.qty}</span>
+                <button onclick="changeQty('${item.id}', 1)" class="w-6 h-6 rounded-md border border-slate-300 dark:border-ocean-800 flex items-center justify-center text-xs font-black hover:bg-slate-200">+</button>
+              </div>
+            </div>
+            <button onclick="changeQty('${item.id}', -999)" class="text-slate-400 hover:text-red-500 p-1">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('cart-total-num').innerText = total;
+      lucide.createIcons();
+    }
+
+    function toggleCartDrawer(open) {
+      const overlay = document.getElementById('cart-drawer-overlay');
+      const panel = document.getElementById('cart-drawer-panel');
+      if (open) {
+        overlay.classList.remove('pointer-events-none', 'opacity-0');
+        overlay.classList.add('opacity-100');
+        panel.classList.remove('-translate-x-full');
+        panel.classList.add('translate-x-0');
+      } else {
+        overlay.classList.remove('opacity-100');
+        overlay.classList.add('pointer-events-none', 'opacity-0');
+        panel.classList.remove('translate-x-0');
+        panel.classList.add('-translate-x-full');
+      }
+    }
+
+    function sendOrderWhatsApp() {
+      if (cart.length === 0) return;
+      const isAr = currentLang === 'ar';
+      const currency = isAr ? 'ر.س' : 'SAR';
+      const notes = document.getElementById('cart-notes').value.trim();
+      let total = 0;
+
+      const header = isAr ? '🌊 *طلب جديد من مطعم مروج البحر*' : '🌊 *New Order - Marouj Al Bahr Seafood*';
+      const itemsText = cart.map((item, idx) => {
+        const sub = item.price * item.qty;
+        total += sub;
+        const name = isAr ? item.nameAr : item.nameEn;
+        return `${idx + 1}. *${name}* (${item.qty}x) = ${sub} ${currency}`;
+      }).join('\n');
+
+      const totalLine = isAr ? `💰 *المجموع:* ${total} ${currency}` : `💰 *Total:* ${total} ${currency}`;
+      const notesLine = notes ? (isAr ? `📝 *ملاحظات:* ${notes}` : `📝 *Notes:* ${notes}`) : '';
+
+      const msg = [header, '------------------', itemsText, '------------------', totalLine, notesLine].filter(Boolean).join('\n');
+      const url = `https://wa.me/966500000000?text=${encodeURIComponent(msg)}`;
+      window.open(url, '_blank');
+    }
+
+    // Reservation Form Handler
+    function handleReservationSubmit(e) {
+      e.preventDefault();
+      const banner = document.getElementById('res-success-banner');
+      banner.classList.remove('hidden');
+      document.getElementById('reservation-form').reset();
+      banner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // Initial boot
+    renderCategories();
+    renderMenu();
+    renderCart();
+    lucide.createIcons();
+  </script>
+</body>
+</html>
